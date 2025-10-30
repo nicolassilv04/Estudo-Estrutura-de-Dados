@@ -7,10 +7,16 @@ class Lista:
         def __str__(self):
             return str(self.valor)
 
-    def __init__(self):
+    def __init__(self, iteravel = None):
         self.__cabeca = None
         self.__cauda = None
         self.__quantidade = 0
+
+        if iteravel is not None and hasattr(iteravel, '__iter__'):
+            for item in iteravel:
+                self.inserir_no_fim(item)
+        elif iteravel is not None:
+            raise TypeError(f'O objeto{type(iteravel)} não é iteravel')
 
     def __len__(self):
         return self.__quantidade
@@ -82,8 +88,20 @@ class Lista:
             return atual.valor
         
     def inserir_no_fim(self, valor):
-        self.inserir(len(self), valor)#pega ultima posição da lista e insere o valor
-    
+        novo = self.No(valor)
+        self.__quantidade += 1
+
+        #quando a lista é vazia
+        if self.__cabeca is None:
+            self.__cabeca = novo
+            self.__cauda = novo
+            return
+        
+        self.__cauda.proximo = novo
+        self.__cauda = novo
+
+
+
     def inserir(self, posicao, valor):
         novo = self.No(valor)
         self.__quantidade +=1
@@ -108,7 +126,7 @@ class Lista:
 
         if atual.proximo is None:
             self.__cauda = novo
-
+ 
         novo.proximo = atual.proximo
         atual.proximo = novo
 
@@ -118,5 +136,6 @@ lista.inserir(posicao=0, valor=5)
 lista.inserir(posicao=1, valor=20)
 lista.inserir(posicao=2, valor=15)
 lista.inserir(posicao=2, valor=7)
+lista.inserir_no_fim(10)
 
-print(lista[-2:-1])
+print(lista)
